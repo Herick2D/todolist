@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,7 +19,6 @@ public class TaskService {
 
     private TaskRepository taskRepository;
     private UserService userService;
-
 
     public ResponseEntity<Task> createTask(Task task) {
         LocalDateTime currentDate = LocalDateTime.now();
@@ -46,6 +46,11 @@ public class TaskService {
             throw new EntityNotFoundException("Task with ID " + taskId + " not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(optionalTask.get());
+    }
+
+    public ResponseEntity<Task> getTaskByTitle(String title) {
+        Optional<Task> task = taskRepository.findByTitle(title);
+        return task.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     public ResponseEntity<Task> updateTask(UUID taskId, Task task) {
@@ -76,4 +81,6 @@ public class TaskService {
         }
         return ResponseEntity.noContent().build();
     }
+
+
 }

@@ -28,8 +28,13 @@ public class TaskController {
     }
 
     @GetMapping("/{taskId}")
-    public ResponseEntity<Task> getTask(@PathVariable UUID taskId) {
+    public ResponseEntity<Task> getTaskById(@PathVariable UUID taskId) {
         return taskService.getTaskById(taskId);
+    }
+
+    @GetMapping("/{title}")
+    public ResponseEntity<Task> getTaskByTitle(@PathVariable String title){
+        return taskService.getTaskByTitle(title);
     }
 
     @PutMapping("/{taskId}")
