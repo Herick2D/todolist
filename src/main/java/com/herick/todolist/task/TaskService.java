@@ -48,9 +48,16 @@ public class TaskService {
         return ResponseEntity.status(HttpStatus.OK).body(optionalTask.get());
     }
 
-    public ResponseEntity<Task> getTaskByTitle(String title) {
-        Optional<Task> task = taskRepository.findByTitle(title);
-        return task.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Optional<Task>> searchTasks(String title, String description) {
+        Optional<Task> tasks = taskRepository.searchTasks(
+                title != null ? title : "",
+                description != null ? description : ""
+        );
+
+        if (tasks.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tasks);
     }
 
     public ResponseEntity<Task> updateTask(UUID taskId, Task task) {

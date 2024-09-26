@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -32,9 +34,14 @@ public class TaskController {
         return taskService.getTaskById(taskId);
     }
 
-    @GetMapping("/{title}")
-    public ResponseEntity<Task> getTaskByTitle(@PathVariable String title){
-        return taskService.getTaskByTitle(title);
+    //todo bussca entre as datas das tasks
+
+    @GetMapping("/search")
+    public ResponseEntity<Optional<Task>> getTasks( //todo Consertar lógica para mesmo sendo um opcional entregar um array de tasks
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String description
+    ) {
+        return taskService.searchTasks(title, description);
     }
 
     @PutMapping("/{taskId}")
