@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -48,17 +47,19 @@ public class TaskService {
         return ResponseEntity.status(HttpStatus.OK).body(optionalTask.get());
     }
 
-    public ResponseEntity<Optional<Task>> searchTasks(String title, String description) {
-        Optional<Task> tasks = taskRepository.searchTasks(
-                title != null ? title : "",
-                description != null ? description : ""
-        );
-
-        if (tasks.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(tasks);
-    }
+//    public ResponseEntity<List<Task>> searchTasks(String title, String description) {
+//        Optional<Task> tasks = taskRepository.searchTasks(
+//                title != null ? title : "",
+//                description != null ? description : ""
+//        );
+//
+//        if (tasks.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        List<Task> receivedTasks = new ArrayList<>();
+//        receivedTasks.addAll(tasks);
+//        return ResponseEntity.status(HttpStatus.OK).body(receivedTasks);
+//    }
 
     public ResponseEntity<Task> updateTask(UUID taskId, Task task) {
         LocalDateTime currentDate = LocalDateTime.now();
