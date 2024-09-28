@@ -19,12 +19,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> userById(@PathVariable UUID userId) {
+    public ResponseEntity<UserDTO> userById(@PathVariable UUID userId) {
         return userService.getUserById(userId);
     }
 }

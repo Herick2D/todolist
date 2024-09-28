@@ -1,6 +1,6 @@
 package com.herick.todolist.task;
 
-import com.herick.todolist.user.User;
+import com.herick.todolist.user.UserDTO;
 import com.herick.todolist.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -30,11 +30,10 @@ public class TaskService {
             }
         }
 
-        User checkUser = userService.getUserById(task.getUserId()).getBody();
+        UserDTO checkUser = userService.getUserById(task.getUserId()).getBody();
         if (checkUser == null) {
             throw new EntityNotFoundException("User with ID " + task.getUserId() + " not found.");
         }
-
         var result = taskRepository.save(task);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
@@ -89,6 +88,5 @@ public class TaskService {
         }
         return ResponseEntity.noContent().build();
     }
-
 
 }

@@ -14,17 +14,27 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    public ResponseEntity<User> createUser(User user) {
-        var result = userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    public ResponseEntity<UserDTO> createUser(User user) {
+        User savedUser = userRepository.save(user);
+        UserDTO dto = new UserDTO();
+
+        dto.setId(savedUser.getId());
+        dto.setEmail(savedUser.getEmail());
+        dto.setUsername(savedUser.getUsername());
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    public ResponseEntity<User> getUserById(UUID userId) {
+    public ResponseEntity<UserDTO> getUserById(UUID userId) {
         var optionalUser = userRepository.findById(userId);
+        UserDTO dto = new UserDTO();
 
         if (optionalUser.isEmpty()) {
             throw new EntityNotFoundException("User with ID " + userId + " not found.");
+        } else {
+            dto.setId(optionalUser.get().getId());
+            dto.setEmail(optionalUser.get().getEmail());
+            dto.setUsername(optionalUser.get().getUsername());
         }
-        return ResponseEntity.ok(optionalUser.get());
+        return ResponseEntity.ok(dto);
     }
 }

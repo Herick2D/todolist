@@ -22,9 +22,8 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<ResponseEntity<Task>> createTask(@RequestBody Task task) {
-        var resultado = taskService.createTask(task);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+        return taskService.createTask(task);
     }
 
     @GetMapping("/{taskId}")
@@ -32,15 +31,15 @@ public class TaskController {
         return taskService.getTaskById(taskId);
     }
 
-    //todo bussca entre as datas das tasks
+    //todo busca entre as datas das tasks
 
-//    @GetMapping(params = "t")
-//    public ResponseEntity<List<Task>> getTasks( //todo Consertar lógica para mesmo sendo um opcional entregar um array de tasks
-//        @RequestParam(name = "t", required = false) String title,
-//        @RequestParam(name = "t", required = false) String description
-//    ) {
-//        return taskService.searchTasks(title, description);
-//    }
+/*    @GetMapping(params = "t")
+    public ResponseEntity<List<Task>> getTasks( //todo Consertar lógica para mesmo sendo um opcional entregar um array de tasks
+                                                @RequestParam(name = "t", required = false) String title,
+                                                @RequestParam(name = "t", required = false) String description
+    ) {
+        return taskService.searchTasks(title, description);
+    }*/
 
     @PutMapping("/{taskId}")
     public ResponseEntity<ResponseEntity<Task>> updateTask(@PathVariable UUID taskId, @RequestBody Task task) {
