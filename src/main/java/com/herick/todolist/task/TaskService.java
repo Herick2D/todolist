@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,7 +20,18 @@ public class TaskService {
     private TaskRepository taskRepository;
     private UserService userService;
 
-    public ResponseEntity<Task> createTask(Task task) {
+    private TaskDTO createDTO(Task task) {
+        TaskDTO newTaskDTO = new TaskDTO();
+        newTaskDTO.setId(task.getId());
+        newTaskDTO.setTitle(task.getTitle());
+        newTaskDTO.setDescription(task.getDescription());
+        newTaskDTO.setStartAt(task.getStartAt());
+        newTaskDTO.setEndAt(task.getEndAt());
+        newTaskDTO.setPriority(task.getPriority());
+        return newTaskDTO;
+    }
+
+    public ResponseEntity<TaskDTO> createTask(Task task) {
         LocalDateTime currentDate = LocalDateTime.now();
 
         if (currentDate.isAfter(task.getStartAt())) {
@@ -34,12 +46,13 @@ public class TaskService {
         if (checkUser == null) {
             throw new EntityNotFoundException("User with ID " + task.getUserId() + " not found.");
         }
-        var result = taskRepository.save(task);
+        var toDTO = taskRepository.save(task);
+        var result = createDTO(toDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     public ResponseEntity<Task> getTaskById(UUID taskId) {
-        var optionalTask = taskRepository.findById(taskId);
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
         if (optionalTask.isEmpty()) {
             throw new EntityNotFoundException("Task with ID " + taskId + " not found.");
         }
@@ -60,7 +73,7 @@ public class TaskService {
 //        return ResponseEntity.status(HttpStatus.OK).body(receivedTasks);
 //    }
 
-    public ResponseEntity<Task> updateTask(UUID taskId, Task task) {
+    public ResponseEntity<TaskDTO> updateTask(UUID taskId, Task task) {
         LocalDateTime currentDate = LocalDateTime.now();
         Task optinalTask = getTaskById(taskId).getBody();
 
@@ -76,7 +89,8 @@ public class TaskService {
             }
         }
         optinalTask.setEndAt(task.getEndAt());
-        var result = taskRepository.save(optinalTask);
+        var toDTO = taskRepository.save(optinalTask);
+        var result = createDTO(toDTO);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

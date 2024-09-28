@@ -1,7 +1,6 @@
 package com.herick.todolist.task;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +18,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TaskController {
 
-    private TaskService taskService;
+    private final TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<TaskDTO> createTask(@RequestBody Task task) {
         return taskService.createTask(task);
     }
 
@@ -42,9 +41,8 @@ public class TaskController {
     }*/
 
     @PutMapping("/{taskId}")
-    public ResponseEntity<ResponseEntity<Task>> updateTask(@PathVariable UUID taskId, @RequestBody Task task) {
-        var resultado = taskService.updateTask(taskId, task);
-        return ResponseEntity.status(HttpStatus.OK).body(resultado);
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable UUID taskId, @RequestBody Task task) {
+        return taskService.updateTask(taskId, task);
     }
 
     @DeleteMapping("/{taskId}")

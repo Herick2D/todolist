@@ -14,6 +14,5 @@ public class TaskDTO {
     private LocalDateTime startAt;
     private LocalDateTime endAt;
     private Priority priority;
-    private UUID userId;
 
 }
