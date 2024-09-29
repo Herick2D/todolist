@@ -21,15 +21,16 @@ public class TaskService {
     private UserService userService;
 
     private TaskDTO createDTO(Task task) {
-        TaskDTO newTaskDTO = new TaskDTO();
-        newTaskDTO.setId(task.getId());
-        newTaskDTO.setTitle(task.getTitle());
-        newTaskDTO.setDescription(task.getDescription());
-        newTaskDTO.setStartAt(task.getStartAt());
-        newTaskDTO.setEndAt(task.getEndAt());
-        newTaskDTO.setPriority(task.getPriority());
-        return newTaskDTO;
+        return new TaskDTO(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStartAt(),
+                task.getEndAt(),
+                task.getPriority()
+        );
     }
+
 
     public ResponseEntity<TaskDTO> createTask(Task task) {
         LocalDateTime currentDate = LocalDateTime.now();

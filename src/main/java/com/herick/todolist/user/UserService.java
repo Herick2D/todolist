@@ -16,25 +16,21 @@ public class UserService {
 
     public ResponseEntity<UserDTO> createUser(User user) {
         User savedUser = userRepository.save(user);
-        UserDTO dto = new UserDTO();
+        UserDTO dto = new UserDTO(savedUser.getId(), savedUser.getEmail(), savedUser.getUsername());
 
-        dto.setId(savedUser.getId());
-        dto.setEmail(savedUser.getEmail());
-        dto.setUsername(savedUser.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     public ResponseEntity<UserDTO> getUserById(UUID userId) {
         var optionalUser = userRepository.findById(userId);
-        UserDTO dto = new UserDTO();
 
         if (optionalUser.isEmpty()) {
             throw new EntityNotFoundException("User with ID " + userId + " not found.");
         } else {
-            dto.setId(optionalUser.get().getId());
-            dto.setEmail(optionalUser.get().getEmail());
-            dto.setUsername(optionalUser.get().getUsername());
+            User user = optionalUser.get();
+            UserDTO dto = new UserDTO(user.getId(), user.getEmail(), user.getUsername());
+            return ResponseEntity.ok(dto);
         }
-        return ResponseEntity.ok(dto);
     }
+
 }
