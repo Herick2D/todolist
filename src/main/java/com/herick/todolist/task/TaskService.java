@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,7 +32,6 @@ public class TaskService {
                 task.getPriority()
         );
     }
-
 
     public ResponseEntity<TaskDTO> createTask(Task task) {
         LocalDateTime currentDate = LocalDateTime.now();
@@ -60,19 +61,17 @@ public class TaskService {
         return ResponseEntity.status(HttpStatus.OK).body(optionalTask.get());
     }
 
-//    public ResponseEntity<List<Task>> searchTasks(String title, String description) {
-//        Optional<Task> tasks = taskRepository.searchTasks(
-//                title != null ? title : "",
-//                description != null ? description : ""
-//        );
-//
-//        if (tasks.isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        List<Task> receivedTasks = new ArrayList<>();
-//        receivedTasks.addAll(tasks);
-//        return ResponseEntity.status(HttpStatus.OK).body(receivedTasks);
-//    }
+    public ResponseEntity<List<Task>> searchTasks(String search) {
+        List<Task> tasks = taskRepository.searchTasks(
+            search != null ? search : "");
+
+        if (tasks.isEmpty()) {
+            return ResponseEntity.ok().body(tasks);
+        }
+        List<Task> receivedTasks = new ArrayList<>();
+        receivedTasks.addAll(tasks);
+        return ResponseEntity.status(HttpStatus.OK).body(receivedTasks);
+    }
 
     public ResponseEntity<TaskDTO> updateTask(UUID taskId, Task task) {
         LocalDateTime currentDate = LocalDateTime.now();

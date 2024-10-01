@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,13 +34,10 @@ public class TaskController {
 
     //todo busca entre as datas das tasks
 
-/*    @GetMapping(params = "t")
-    public ResponseEntity<List<Task>> getTasks( //todo Consertar lógica para mesmo sendo um opcional entregar um array de tasks
-                                                @RequestParam(name = "t", required = false) String title,
-                                                @RequestParam(name = "t", required = false) String description
-    ) {
-        return taskService.searchTasks(title, description);
-    }*/
+    @GetMapping(params = "t")
+    public ResponseEntity<List<Task>> getTasks(@RequestParam(name = "t", required = false) String search) {
+        return taskService.searchTasks(search);
+    }
 
     @PutMapping("/{taskId}")
     public ResponseEntity<TaskDTO> updateTask(@PathVariable UUID taskId, @RequestBody Task task) {
